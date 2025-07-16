@@ -18,9 +18,12 @@ if __name__ == '__main__':
     df['lastname'] = full_names[0]
     df['firstname'] = full_names[1].fillna(df['firstname'])
     df['surname'] = full_names[2].fillna(df['firstname'].str.split().str[1]).fillna(df['surname'])
+    # объединение дублирующихся записей
     df_merge = df.groupby(['lastname','firstname','surname']).agg(lambda x: x.dropna().iloc[0] 
                                                                   if x.dropna().any()
                                                                   else np.nan
-                                                                  ).reset_index() # объединение дублирующихся записей
-    df_merge['phone'] = (df_merge['phone'].apply(phone_format)) # форматирование номера телефона
-    df_merge.to_csv('phonebook_clean.csv', encoding='utf-8', index=False) # запись в csv
+                                                                  ).reset_index() 
+    # форматирование номера телефона
+    df_merge['phone'] = (df_merge['phone'].apply(phone_format))
+    # запись в csv
+    df_merge.to_csv('phonebook_clean.csv', encoding='utf-8', index=False) 
